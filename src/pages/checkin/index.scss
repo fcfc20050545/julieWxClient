@@ -1,0 +1,135 @@
+.page {
+  height: 100%;
+  background: #f4f1ea;
+}
+
+.stage {
+  position: relative;
+  height: 100%;
+}
+
+.clock-block {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.clock {
+  font-size: 56px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: #1c1c1c;
+}
+
+.date {
+  margin-top: 12px;
+  font-size: 15px;
+  color: #5f5954;
+}
+
+.action {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.punch {
+  width: 148px;
+  height: 148px;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: #243056;
+  color: #f7f4ee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 0.14em;
+}
+
+.punch::after {
+  border: none;
+}
+
+.punch-line {
+  display: block;
+}
+
+.punch-hover {
+  transform: scale(0.96);
+}
+
+.confirm {
+  position: absolute;
+  top: calc(100% + 16px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  color: #5f5954;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.gate {
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.gate-title {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.gate-hint {
+  margin-top: 8px;
+  margin-bottom: 24px;
+  color: #5f5954;
+  font-size: 14px;
+}
+
+.gate-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  background: #f7f4ee;
+  border: 1PX solid #e3dbd0;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.gate-error {
+  width: 100%;
+  margin-top: 8px;
+  color: #c23b32;
+  font-size: 13px;
+}
+
+.gate-btn {
+  width: 100%;
+  margin: 24px 0 0;
+  background: #243056;
+  color: #f7f4ee;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.gate-btn::after {
+  border: none;
+}
