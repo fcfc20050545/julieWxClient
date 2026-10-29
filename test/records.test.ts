@@ -3,9 +3,11 @@ import { describe, it } from 'node:test'
 import {
   TIMEOUT_TIME,
   buildRows,
+  formatCheckInClock,
   formatClock,
   formatDateLine,
-  isOvertime
+  isOvertime,
+  mapSleepRecords
 } from '../src/utils/records.ts'
 
 function at(year: number, month: number, day: number, hour: number, minute: number, second: number) {
@@ -74,5 +76,47 @@ describe('check-in rows', () => {
     ])
     assert.equal(rows[0].nickname, '微信用户')
     assert.equal(rows[0].overtime, false)
+  })
+})
+
+describe('server record rows', () => {
+  it('formats the server clock and check-in label from the local datetime string', () => {
+    assert.equal(formatCheckInClock('2025-10-28T22:30:00'), '22:30:00')
+    assert.equal(formatCheckInClock('2025-10-28T00:30:09'), '00:30:09')
+  })
+
+  it('keeps the server order and uses 微信用户 when the nickname is blank', () => {
+    const rows = mapSleepRecords([
+      {
+        openId: 'late',
+        nickName: '   ',
+        date: '2025-10-27',
+        lastCheckInTime: '2025-10-28T00:30:00',
+        overtime: true
+      },
+      {
+        openId: 'on-time',
+        nickName: 'liu',
+        date: '2025-10-28',
+        lastCheckInTime: '2025-10-28T22:30:00',
+        overtime: false
+      }
+    ])
+    assert.deepEqual(rows, [
+      {
+        key: '2025-10-27:late',
+        date: '2025-10-27',
+        nickname: '微信用户',
+        lastCheckin: '2025-10-28 00:30',
+        overtime: true
+      },
+      {
+        key: '2025-10-28:on-time',
+        date: '2025-10-28',
+        nickname: 'liu',
+        lastCheckin: '2025-10-28 22:30',
+        overtime: false
+      }
+    ])
   })
 })

@@ -1,5 +1,9 @@
+@use '../../components/sleep-tab/dock';
+
 .page {
   min-height: 100%;
+  box-sizing: border-box;
+  padding-bottom: calc(50px + env(safe-area-inset-bottom));
   background: #f4f1ea;
 }
 

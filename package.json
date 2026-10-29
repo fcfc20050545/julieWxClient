@@ -12,7 +12,7 @@
   "scripts": {
     "dev:weapp": "taro build --type weapp --watch",
     "build:weapp": "taro build --type weapp",
-    "test": "node --experimental-strip-types --test test/records.test.ts test/layout.test.ts"
+    "test": "node --experimental-strip-types --test test/records.test.ts test/layout.test.ts test/fines.test.ts"
   },
   "browserslist": [
     "last 3 versions",

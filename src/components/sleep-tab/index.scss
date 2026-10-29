@@ -1,0 +1,31 @@
+.tab {
+  display: flex;
+  box-sizing: border-box;
+  height: 50px;
+  background: #f7f4ee;
+  border-top: 1PX solid #e3dbd0;
+}
+
+.item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #5f5954;
+}
+
+.on {
+  color: #243056;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+.text {
+  margin-top: 2px;
+  font-size: 10px;
+  line-height: 1.2;
+}

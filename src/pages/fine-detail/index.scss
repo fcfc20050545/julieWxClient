@@ -1,0 +1,65 @@
+.page {
+  min-height: 100%;
+  box-sizing: border-box;
+  padding: 8px 16px 24px;
+  background: #f4f1ea;
+}
+
+.day {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1PX solid #e3dbd0;
+}
+
+.date {
+  font-size: 14px;
+  color: #1c1c1c;
+}
+
+.time {
+  margin-top: 4px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: #5f5954;
+}
+
+.day-side {
+  display: flex;
+  align-items: center;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ok {
+  color: #0d7a45;
+  background: #e5f5ec;
+}
+
+.late {
+  color: #c23b32;
+  background: #fdeceb;
+}
+
+.fine {
+  width: 40px;
+  margin-left: 8px;
+  text-align: right;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  color: #1c1c1c;
+}
+
+.empty {
+  padding: 48px 16px;
+  text-align: center;
+  color: #5f5954;
+  font-size: 14px;
+}

@@ -10,6 +10,22 @@ export type RecordRow = {
   overtime: boolean
 }
 
+export type SleepRecordItem = {
+  openId?: string
+  nickName?: string | null
+  date?: string
+  lastCheckInTime?: string
+  overtime?: boolean
+}
+
+export type SleepRecordRow = {
+  key: string
+  date: string
+  nickname: string
+  lastCheckin: string
+  overtime: boolean
+}
+
 export const TIMEOUT_TIME = '23:30:00'
 
 const WEEKDAYS = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
@@ -46,6 +62,41 @@ export function normalizeTimeout(timeout: string) {
 
 export function isOvertime(hms: string, timeout = TIMEOUT_TIME) {
   return hms > normalizeTimeout(timeout)
+}
+
+export function formatCheckInClock(value: string) {
+  const { time } = splitDateTime(value)
+  const [hour = '00', minute = '00', second = '00'] = time.split(':')
+  return `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}:${second.slice(0, 2).padStart(2, '0')}`
+}
+
+export function formatCheckInLabel(value: string) {
+  const { date, time } = splitDateTime(value)
+  const [hour = '00', minute = '00'] = time.split(':')
+  return `${date} ${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`
+}
+
+export function mapSleepRecords(records: SleepRecordItem[]): SleepRecordRow[] {
+  return records.map((item) => {
+    const date = item.date || ''
+    const openId = item.openId || ''
+    return {
+      key: `${date}:${openId}`,
+      date,
+      nickname: (item.nickName || '').trim() || '微信用户',
+      lastCheckin: formatCheckInLabel(item.lastCheckInTime || ''),
+      overtime: Boolean(item.overtime)
+    }
+  })
+}
+
+function splitDateTime(value: string) {
+  const text = value || ''
+  const parts = text.includes('T') ? text.split('T') : text.split(' ')
+  return {
+    date: parts[0] || '',
+    time: parts[1] || ''
+  }
 }
 
 export function buildRows(checkins: CheckinRecord[], timeout = TIMEOUT_TIME): RecordRow[] {

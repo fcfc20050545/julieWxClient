@@ -2,6 +2,7 @@ import Taro from '@tarojs/taro'
 import type { CheckinRecord } from '../utils/records'
 
 const NICKNAME_KEY = 'sleep_nickname'
+const AVATAR_KEY = 'sleep_avatar'
 const CHECKINS_KEY = 'sleep_checkins'
 
 export function getNickname() {
@@ -11,6 +12,15 @@ export function getNickname() {
 
 export function saveNickname(nickname: string) {
   Taro.setStorageSync(NICKNAME_KEY, nickname.trim())
+}
+
+export function getAvatarUrl() {
+  const value = Taro.getStorageSync(AVATAR_KEY)
+  return typeof value === 'string' ? value : ''
+}
+
+export function saveAvatarUrl(avatarUrl: string) {
+  Taro.setStorageSync(AVATAR_KEY, avatarUrl.trim())
 }
 
 export function getCheckins(): CheckinRecord[] {

@@ -1,19 +1,6 @@
 <template>
   <view class="page" :style="pageStyle">
-    <form v-if="ready && !nickname" class="gate" @submit="onSaveNickname">
-      <view class="gate-title">填写昵称</view>
-      <view class="gate-hint">这个昵称会显示在打卡记录里。</view>
-      <input
-        class="gate-input"
-        type="nickname"
-        name="nickname"
-        placeholder="微信昵称"
-        @input="onNameInput"
-      />
-      <view v-if="nameError" class="gate-error">{{ nameError }}</view>
-      <button class="gate-btn" form-type="submit">保存</button>
-    </form>
-    <view v-else-if="ready" class="stage">
+    <view class="stage">
       <view class="clock-block" :style="{ top: clockTop }">
         <view class="clock">{{ clockText }}</view>
         <view class="date">{{ dateText }}</view>
@@ -26,28 +13,45 @@
         <view v-if="recorded" class="confirm">已记录 {{ recorded }}</view>
       </view>
     </view>
+    <view class="dock">
+      <sleep-tab current="checkin" />
+    </view>
+    <view v-if="confirming" class="mask" @tap="onCancel" @touchmove.stop.prevent>
+      <view class="dialog" @tap.stop>
+        <view class="dialog-text">是否确认打卡？</view>
+        <view class="dialog-actions">
+          <button class="dialog-btn dialog-cancel" :disabled="submitting" @tap="onCancel">取消</button>
+          <button class="dialog-btn dialog-ok" :disabled="submitting" @tap="onConfirm">确定</button>
+        </view>
+      </view>
+    </view>
   </view>
 </template>
 
 <script setup lang="ts">
 import Taro, { useDidHide, useDidShow } from '@tarojs/taro'
 import { computed, onUnmounted, ref } from 'vue'
-import { addCheckin, getNickname, saveNickname } from '../../services/store'
-import { stageLayout } from '../../utils/layout'
-import { formatClock, formatDateLine } from '../../utils/records'
+import SleepTab from '../../components/sleep-tab/index.vue'
+import { checkIn } from '../../services/sleep'
+import { getAvatarUrl, getNickname } from '../../services/store'
+import { DESIGN_WIDTH, stageLayout } from '../../utils/layout'
+import { formatCheckInClock, formatClock, formatDateLine } from '../../utils/records'
 import './index.scss'
+
+const TAB_BAR_HEIGHT = 50
 
 function readStage() {
   const info = Taro.getWindowInfo()
-  return stageLayout(info.windowHeight, info.windowWidth)
+  const screenHeight = info.screenHeight || info.windowHeight
+  const safeBottom = info.safeArea ? Math.max(0, screenHeight - info.safeArea.bottom) : 0
+  const tabPhysical = (TAB_BAR_HEIGHT * info.windowWidth) / DESIGN_WIDTH + safeBottom
+  return stageLayout(Math.max(0, info.windowHeight - tabPhysical), info.windowWidth)
 }
 
 const now = ref(Date.now())
-const nickname = ref('')
-const ready = ref(false)
 const recorded = ref('')
-const draft = ref('')
-const nameError = ref('')
+const confirming = ref(false)
+const submitting = ref(false)
 const box = ref(readStage())
 let timer: ReturnType<typeof setInterval> | null = null
 
@@ -64,8 +68,6 @@ function clearTimer() {
 }
 
 useDidShow(() => {
-  nickname.value = getNickname()
-  ready.value = true
   now.value = Date.now()
   box.value = readStage()
   clearTimer()
@@ -82,26 +84,29 @@ onUnmounted(() => {
   clearTimer()
 })
 
-function onNameInput(event: { detail?: { value?: string } }) {
-  draft.value = event.detail?.value || ''
-  nameError.value = ''
-}
-
-function onSaveNickname(event: { detail?: { value?: { nickname?: string } } }) {
-  const fromForm = event.detail?.value?.nickname || ''
-  const name = (fromForm || draft.value).trim()
-  if (!name) {
-    nameError.value = '请填写昵称'
-    return
-  }
-  saveNickname(name)
-  nickname.value = name
-  nameError.value = ''
-}
-
 function onPunch() {
-  const checkedAt = now.value
-  addCheckin(nickname.value, checkedAt)
-  recorded.value = formatClock(checkedAt)
+  if (submitting.value || confirming.value) return
+  confirming.value = true
+}
+
+function onCancel() {
+  if (submitting.value) return
+  confirming.value = false
+}
+
+async function onConfirm() {
+  if (submitting.value) return
+  submitting.value = true
+  try {
+    const result = await checkIn(getNickname(), getAvatarUrl())
+    recorded.value = formatCheckInClock(result.checkInTime)
+    confirming.value = false
+  } catch (error) {
+    confirming.value = false
+    const message = error instanceof Error ? error.message : '打卡失败'
+    Taro.showToast({ title: message, icon: 'none' })
+  } finally {
+    submitting.value = false
+  }
 }
 </script>

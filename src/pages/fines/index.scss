@@ -1,0 +1,115 @@
+@use '../../components/sleep-tab/dock';
+
+.page {
+  min-height: 100%;
+  box-sizing: border-box;
+  padding: 8px 16px calc(24px + 50px + env(safe-area-inset-bottom));
+  background: #f4f1ea;
+}
+
+.month {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 12px 4px 16px;
+}
+
+.month-value {
+  font-size: 20px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: #1c1c1c;
+}
+
+.month-hint {
+  font-size: 13px;
+  color: #5f5954;
+}
+
+.card {
+  margin-bottom: 12px;
+  padding: 16px;
+  background: #f7f4ee;
+  border-radius: 12px;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+}
+
+.nickname {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 17px;
+  font-weight: 500;
+  color: #1c1c1c;
+}
+
+.avatar {
+  display: block;
+  width: 36px;
+  height: 36px;
+  margin-left: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.avatar-empty {
+  background: #e3dbd0;
+}
+
+.stats {
+  display: flex;
+  margin-top: 12px;
+}
+
+.stat {
+  flex: 1;
+}
+
+.label {
+  font-size: 12px;
+  color: #5f5954;
+}
+
+.value {
+  margin-top: 4px;
+  font-size: 22px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: #1c1c1c;
+}
+
+.card-foot {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.detail-btn {
+  margin: 0;
+  padding: 0 16px;
+  height: 32px;
+  line-height: 32px;
+  background: #243056;
+  color: #f7f4ee;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.detail-btn::after {
+  border: none;
+}
+
+.empty {
+  padding: 48px 16px;
+  text-align: center;
+  color: #5f5954;
+  font-size: 14px;
+}
